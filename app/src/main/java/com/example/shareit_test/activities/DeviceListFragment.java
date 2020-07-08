@@ -108,6 +108,7 @@ public class DeviceListFragment extends ListFragment implements PeerListListener
                 v = vi.inflate(R.layout.device_list_fragment, null);
             }
             WifiP2pDevice device = items.get(position);
+            /*
             if (device != null) {
                 TextView top = (TextView) v.findViewById(R.id.row_devices);
                 TextView bottom = (TextView) v.findViewById(R.id.device_details);
@@ -118,7 +119,7 @@ public class DeviceListFragment extends ListFragment implements PeerListListener
                     bottom.setText(getDeviceStatus(device.status));
                 }
             }
-
+            */
             return v;
 
         }
@@ -129,12 +130,13 @@ public class DeviceListFragment extends ListFragment implements PeerListListener
      *
      * @param device WifiP2pDevice object
      */
+
     public void updateThisDevice(WifiP2pDevice device) {
         this.device = device;
-        TextView view = (TextView) mContentView.findViewById(R.id.my_name);
-        view.setText(device.deviceName);
-        view = (TextView) mContentView.findViewById(R.id.my_status);
-        view.setText(getDeviceStatus(device.status));
+        //TextView view = (TextView) mContentView.findViewById(R.id.my_name);
+        //view.setText(device.deviceName);
+        //view = (TextView) mContentView.findViewById(R.id.my_status);
+        //view.setText(getDeviceStatus(device.status));
     }
 
     @Override
@@ -146,7 +148,7 @@ public class DeviceListFragment extends ListFragment implements PeerListListener
         peers.addAll(peerList.getDeviceList());
         ((WiFiPeerListAdapter) getListAdapter()).notifyDataSetChanged();
         if (peers.size() == 0) {
-            Log.d(WiFiDirectActivity.TAG, "No devices found");
+            Log.d("SendActivity", "No devices found");
             return;
         }
 

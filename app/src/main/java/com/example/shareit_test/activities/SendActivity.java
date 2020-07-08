@@ -50,8 +50,8 @@ public class SendActivity extends AppCompatActivity {
         });
 
 
-        manager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
-        channel = manager.initialize(this, getMainLooper(), null);
+        //manager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
+        //channel = manager.initialize(this, getMainLooper(), null);
 
 
         createhotspot.setVisibility(View.INVISIBLE);

@@ -26,6 +26,7 @@
         android:layout_marginBottom="49dp"
         android:text="@string/hotspot" />
 
+    <!--
     <fragment
         android:id="@+id/fragment"
         android:name="com.example.shareit_test.activities.DeviceListFragment"
@@ -37,5 +38,6 @@
         android:layout_marginStart="12dp"
         android:layout_marginLeft="12dp"
         android:layout_marginBottom="199dp" />
+     -->
 
 </RelativeLayout>
