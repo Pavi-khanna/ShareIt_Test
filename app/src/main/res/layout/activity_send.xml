@@ -2,14 +2,40 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/avail_list_frag"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.SendActivity">
 
     <ListView
-        android:id="@+id/list_send"
-        android:layout_marginTop="10dp"
+        android:id="@+id/avail_devices_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="500dp"
+        android:layout_marginTop="10dp" />
+
+    <Button
+        android:id="@+id/hotspot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="110dp"
+        android:layout_marginLeft="110dp"
+        android:layout_marginBottom="49dp"
+        android:text="@string/hotspot" />
+
+    <fragment
+        android:id="@+id/fragment"
+        android:name="com.example.shareit_test.activities.DeviceListFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="12dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginBottom="199dp" />
 
 </RelativeLayout>

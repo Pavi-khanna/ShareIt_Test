@@ -3,6 +3,7 @@
     <string name="receive">Receive</string>
     <string name="send">Send</string>
     <string name="share">Share</string>
+    <string name="hotspot">Create Mobile Hostpot</string>
     <string name="settings">Settings</string>
     <string name="title_activity_settings">SettingsActivity</string>
 
