@@ -1,6 +1,7 @@
 package com.example.shareit_test;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -40,6 +41,10 @@ public class MainActivity extends AppCompatActivity {
         int [] perm_codes = {FINE_LOC_CODE,WIFI_STATE_CODE,INTERNET_ACCESS_CODE,ACCESS_MEDIA_CODE};
         checkPermission(permissions,perm_codes);
 
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar!=null) {
+            actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_test));
+        }
 
         send = findViewById(R.id.button_send);
         send.setOnClickListener(new View.OnClickListener() {
@@ -58,8 +63,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void checkPermission(String[] permissions, int[] perm_codes)
-    {
+    public void checkPermission(String[] permissions, int[] perm_codes) {
         int i = 0;
         for (String permission : permissions){
             if (ContextCompat.checkSelfPermission(MainActivity.this, permission)
