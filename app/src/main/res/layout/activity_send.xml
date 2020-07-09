@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/avail_list_frag"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.SendActivity">
+
 
     <ListView
         android:id="@+id/avail_devices_list"
@@ -26,18 +27,28 @@
         android:layout_marginBottom="49dp"
         android:text="@string/hotspot" />
 
-    <!--
+
     <fragment
-        android:id="@+id/fragment"
-        android:name="com.example.shareit_test.activities.DeviceListFragment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="12dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginBottom="199dp" />
-     -->
+        class="com.example.shareit_test.activities.DeviceListFragment"
+        android:id="@+id/avail_list_frag"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 
 </RelativeLayout>
+-->
+<LinearLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:orientation="vertical"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent">
+
+    <fragment
+        android:id="@+id/avail_list_frag"
+        class="com.example.shareit_test.activities.DeviceListFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <!-- Preview: layout=@layout/row_devices -->
+    </fragment>
+
+</LinearLayout>

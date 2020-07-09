@@ -35,13 +35,14 @@ public class DeviceListFragment extends ListFragment implements PeerListListener
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        this.setListAdapter(new WiFiPeerListAdapter(getActivity(), R.layout.device_list_fragment, peers));
+        this.setListAdapter(new WiFiPeerListAdapter(getActivity(), R.layout.row_devices, peers));
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mContentView = inflater.inflate(R.layout.device_list_fragment, null);
+        onInitiateDiscovery();
         return mContentView;
     }
 
@@ -105,12 +106,11 @@ public class DeviceListFragment extends ListFragment implements PeerListListener
             if (v == null) {
                 LayoutInflater vi = (LayoutInflater) getActivity().getSystemService(
                         Context.LAYOUT_INFLATER_SERVICE);
-                v = vi.inflate(R.layout.device_list_fragment, null);
+                v = vi.inflate(R.layout.row_devices, null);
             }
             WifiP2pDevice device = items.get(position);
-            /*
             if (device != null) {
-                TextView top = (TextView) v.findViewById(R.id.row_devices);
+                TextView top = (TextView) v.findViewById(R.id.device_name);
                 TextView bottom = (TextView) v.findViewById(R.id.device_details);
                 if (top != null) {
                     top.setText(device.deviceName);
@@ -119,7 +119,6 @@ public class DeviceListFragment extends ListFragment implements PeerListListener
                     bottom.setText(getDeviceStatus(device.status));
                 }
             }
-            */
             return v;
 
         }
