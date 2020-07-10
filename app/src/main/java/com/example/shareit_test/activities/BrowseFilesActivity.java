@@ -47,6 +47,7 @@ public class BrowseFilesActivity extends AppCompatActivity {
         FloatingActionButton fab = findViewById(R.id.fab);
 
         Intent intent = getIntent();
+        dest_config = new WifiP2pConfig();
         dest_config.deviceAddress = intent.getStringExtra("IP");
 
         fab.setOnClickListener(new View.OnClickListener() {

@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.wifi.WifiManager;
+import android.net.wifi.WpsInfo;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pManager;
@@ -181,8 +182,6 @@ public class SendActivity extends Activity implements WifiP2pManager.ChannelList
 
 
         manager.connect(channel, config, new WifiP2pManager.ActionListener() {
-
-
             @Override
             public void onSuccess() {
                 // WiFiDirectBroadcastReceiver will notify us. Ignore for now.
@@ -215,6 +214,10 @@ public class SendActivity extends Activity implements WifiP2pManager.ChannelList
     @Override
     public void showDetails(WifiP2pDevice device) {
             Log.d("SendActivity",device.deviceName);
+            WifiP2pConfig config = new WifiP2pConfig();
+            config.deviceAddress = device.deviceAddress;
+            config.wps.setup = WpsInfo.PBC;
+            connect(config);
     }
 
     @Override
