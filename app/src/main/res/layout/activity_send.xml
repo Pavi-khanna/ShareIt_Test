@@ -47,8 +47,14 @@ android:layout_height="fill_parent">
         android:id="@+id/avail_list_frag"
         class="com.example.shareit_test.activities.DeviceListFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="691dp">
         <!-- Preview: layout=@layout/row_devices -->
     </fragment>
+
+    <Button
+        android:id="@+id/hotspot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/hotspot" />
 
 </LinearLayout>

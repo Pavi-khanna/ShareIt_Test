@@ -1,18 +1,23 @@
 package com.example.shareit_test.activities;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.net.wifi.WifiManager;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -40,19 +45,23 @@ public class SendActivity extends Activity implements WifiP2pManager.ChannelList
     private boolean retryChannel = false;
     private final IntentFilter intentFilter = new IntentFilter();
     private BroadcastReceiver receiver = null;
-
+    private WifiP2pManager.ActionListener ActionListener;
+    private WifiP2pConfig group_config;
+    private WifiP2pConfig.Builder config_builder;
     /**
      * @param isWifiP2pEnabled the isWifiP2pEnabled to set
      */
     public void setIsWifiP2pEnabled(boolean isWifiP2pEnabled) {
         this.isWifiP2pEnabled = isWifiP2pEnabled;
+        Log.d("IN Send Activity", "State: " + isWifiP2pEnabled);
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send);
-        //createhotspot = findViewById(R.id.hotspot);
+        createhotspot = findViewById(R.id.hotspot);
         //senderListView = findViewById(R.id.avail_devices_list);
 
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
@@ -82,15 +91,63 @@ public class SendActivity extends Activity implements WifiP2pManager.ChannelList
         });
          */
 
-        /*
+
         createhotspot.setVisibility(View.INVISIBLE);
         createhotspot.postDelayed(new Runnable() {
             public void run() {
                 createhotspot.setVisibility(View.VISIBLE);
             }
         }, 5000);
-         */
+
+
+        createhotspot.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("MissingPermission")
+            @Override
+            public void onClick(View view) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    config_builder.setNetworkName("NEW_HOTPOT");
+                    config_builder.setGroupOperatingBand(WifiP2pConfig.GROUP_OWNER_BAND_AUTO);
+                    group_config = config_builder.build();
+                    manager.createGroup(channel,group_config,ActionListener);
+                } else {
+                    Toast.makeText(SendActivity.this,"Cannot create a Hotpost.." +
+                            "Please create manually",Toast.LENGTH_SHORT).show();
+                    //open settings
+                }
+
+            }
+        });
+
+
+        final DeviceListFragment fragment = (DeviceListFragment) getFragmentManager()
+                .findFragmentById(R.id.avail_list_frag);
+        fragment.onInitiateDiscovery();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        manager.discoverPeers(channel, new WifiP2pManager.ActionListener() {
+            @Override
+            public void onSuccess() {
+                Toast.makeText(SendActivity.this, "Discovery Initiated",
+                        Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(int reasonCode) {
+                Toast.makeText(SendActivity.this, "Discovery Failed : " + reasonCode,
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
     }
+
+
 
     /** register the BroadcastReceiver with the intent values to be matched */
     @Override
@@ -118,23 +175,20 @@ public class SendActivity extends Activity implements WifiP2pManager.ChannelList
         }
     }
 
+    @SuppressLint("MissingPermission")
     @Override
-    public void connect(WifiP2pConfig config) {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
+    public void connect(final WifiP2pConfig config) {
+
+
         manager.connect(channel, config, new WifiP2pManager.ActionListener() {
+
 
             @Override
             public void onSuccess() {
                 // WiFiDirectBroadcastReceiver will notify us. Ignore for now.
+                Intent browseFilesIntent = new Intent(SendActivity.this, BrowseFilesActivity.class);
+                browseFilesIntent.putExtra("IP", config.deviceAddress);
+                startActivity(browseFilesIntent);
             }
 
             @Override
@@ -147,28 +201,20 @@ public class SendActivity extends Activity implements WifiP2pManager.ChannelList
 
     @Override
     public void disconnect() {
-
         manager.removeGroup(channel, new WifiP2pManager.ActionListener() {
-
             @Override
             public void onSuccess() {
                 // later
             }
-
             @Override
             public void onFailure(int reasonCode) {
                 Log.d(TAG, "Disconnect failed. Reason :" + reasonCode);
-
             }
-
-
-
         });
     }
     @Override
     public void showDetails(WifiP2pDevice device) {
-
-
+            Log.d("SendActivity",device.deviceName);
     }
 
     @Override
@@ -181,7 +227,7 @@ public class SendActivity extends Activity implements WifiP2pManager.ChannelList
             manager.initialize(this, getMainLooper(), this);
         } else {
             Toast.makeText(this,
-                    "Severe! Channel is probably lost premanently. Try Disable/Re-Enable P2P.",
+                    "Severe! Channel is probably lost permanently. Try Disable/Re-Enable P2P.",
                     Toast.LENGTH_LONG).show();
         }
     }

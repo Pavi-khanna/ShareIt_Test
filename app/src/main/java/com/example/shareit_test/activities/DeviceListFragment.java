@@ -1,5 +1,6 @@
 package com.example.shareit_test.activities;
 
+
 import android.app.ListFragment;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -35,14 +36,14 @@ public class DeviceListFragment extends ListFragment implements PeerListListener
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        this.setListAdapter(new WiFiPeerListAdapter(getActivity(), R.layout.row_devices, peers));
+        this.setListAdapter(new WiFiPeerListAdapter(getActivity(), R.layout.activity_send, peers));
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mContentView = inflater.inflate(R.layout.device_list_fragment, null);
-        onInitiateDiscovery();
+
         return mContentView;
     }
 
@@ -100,6 +101,7 @@ public class DeviceListFragment extends ListFragment implements PeerListListener
 
         }
 
+
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View v = convertView;
@@ -147,8 +149,11 @@ public class DeviceListFragment extends ListFragment implements PeerListListener
         peers.addAll(peerList.getDeviceList());
         ((WiFiPeerListAdapter) getListAdapter()).notifyDataSetChanged();
         if (peers.size() == 0) {
-            Log.d("SendActivity", "No devices found");
+            Log.d("DeviceListFrag", "No devices found");
             return;
+        }
+        else{
+            Log.d("DeviceListFrag",peers.toString());
         }
 
     }
@@ -165,6 +170,7 @@ public class DeviceListFragment extends ListFragment implements PeerListListener
         if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
+
         progressDialog = ProgressDialog.show(getActivity(), "Press back to cancel", "finding peers", true,
                 true, new DialogInterface.OnCancelListener() {
 

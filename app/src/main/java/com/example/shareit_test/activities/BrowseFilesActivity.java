@@ -1,6 +1,7 @@
 package com.example.shareit_test.activities;
 
 import android.content.Intent;
+import android.net.wifi.p2p.WifiP2pConfig;
 import android.os.Bundle;
 
 import com.example.shareit_test.R;
@@ -19,7 +20,7 @@ import com.example.shareit_test.activities.ui.main.SectionsPagerAdapter;
 public class BrowseFilesActivity extends AppCompatActivity {
 
     String path;
-
+    private WifiP2pConfig dest_config;
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
@@ -46,7 +47,7 @@ public class BrowseFilesActivity extends AppCompatActivity {
         FloatingActionButton fab = findViewById(R.id.fab);
 
         Intent intent = getIntent();
-        final String message = intent.getStringExtra("IP");
+        dest_config.deviceAddress = intent.getStringExtra("IP");
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
