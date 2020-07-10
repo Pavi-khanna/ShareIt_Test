@@ -49,6 +49,7 @@ public class SendActivity extends Activity implements WifiP2pManager.ChannelList
     private WifiP2pManager.ActionListener ActionListener;
     private WifiP2pConfig group_config;
     private WifiP2pConfig.Builder config_builder;
+    private Intent browseFilesIntent;
     /**
      * @param isWifiP2pEnabled the isWifiP2pEnabled to set
      */
@@ -92,7 +93,7 @@ public class SendActivity extends Activity implements WifiP2pManager.ChannelList
         });
          */
 
-
+        browseFilesIntent = new Intent(SendActivity.this, BrowseFilesActivity.class);
         createhotspot.setVisibility(View.INVISIBLE);
         createhotspot.postDelayed(new Runnable() {
             public void run() {
@@ -100,16 +101,31 @@ public class SendActivity extends Activity implements WifiP2pManager.ChannelList
             }
         }, 5000);
 
-
         createhotspot.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("MissingPermission")
             @Override
             public void onClick(View view) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    config_builder.setNetworkName("NEW_HOTPOT");
+                    config_builder = new WifiP2pConfig.Builder();
+                    group_config = new WifiP2pConfig();
+                    config_builder.setNetworkName("DIRECT-NEW_HOTPOT");
+                    config_builder.setPassphrase("yash12345");//8-16 req
                     config_builder.setGroupOperatingBand(WifiP2pConfig.GROUP_OWNER_BAND_AUTO);
+                    //config_builder.enablePersistentMode(true);
                     group_config = config_builder.build();
-                    manager.createGroup(channel,group_config,ActionListener);
+                    manager.createGroup(channel,group_config,new WifiP2pManager.ActionListener() {
+                        @Override
+                        public void onSuccess() {
+                            // Device is ready to accept incoming connections from peers.
+                            Log.d("SendActivity","Device ready group created");
+                        }
+
+                        @Override
+                        public void onFailure(int reason) {
+                            Toast.makeText(SendActivity.this, "P2P group creation failed. Retry. :"+reason,
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 } else {
                     Toast.makeText(SendActivity.this,"Cannot create a Hotpost.." +
                             "Please create manually",Toast.LENGTH_SHORT).show();
@@ -180,14 +196,12 @@ public class SendActivity extends Activity implements WifiP2pManager.ChannelList
     @Override
     public void connect(final WifiP2pConfig config) {
 
-
         manager.connect(channel, config, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
                 // WiFiDirectBroadcastReceiver will notify us. Ignore for now.
-                Intent browseFilesIntent = new Intent(SendActivity.this, BrowseFilesActivity.class);
                 browseFilesIntent.putExtra("IP", config.deviceAddress);
-                startActivity(browseFilesIntent);
+
             }
 
             @Override
@@ -198,6 +212,9 @@ public class SendActivity extends Activity implements WifiP2pManager.ChannelList
         });
     }
 
+    public void starBrowse(){
+        startActivity(browseFilesIntent);
+    }
     @Override
     public void disconnect() {
         manager.removeGroup(channel, new WifiP2pManager.ActionListener() {
