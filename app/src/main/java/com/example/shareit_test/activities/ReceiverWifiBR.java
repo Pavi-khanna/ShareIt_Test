@@ -14,7 +14,7 @@ import androidx.core.app.ActivityCompat;
 
 import com.example.shareit_test.R;
 
-public class WifiBroadcastReceiver extends BroadcastReceiver {
+public class ReceiverWifiBR extends BroadcastReceiver {
 
     private WifiP2pManager manager;
     private WifiP2pManager.Channel channel;
@@ -25,7 +25,7 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
      * @param channel Wifi p2p channel
      * @param activity activity associated with the receiver
      */
-    public WifiBroadcastReceiver(WifiP2pManager manager, WifiP2pManager.Channel channel,
+    public ReceiverWifiBR(WifiP2pManager manager, WifiP2pManager.Channel channel,
                                  SendActivity activity) {
         super();
         this.manager = manager;
@@ -51,27 +51,15 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
                 activity.setIsWifiP2pEnabled(false);
                 activity.resetData();
             }
-            Log.d("SendActivity.TAG", "P2P state changed - " + state);
+            Log.d("Receive Activity", "P2P state changed - " + state);
         } else if (WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action)) {
             // request available peers from the wifi p2p manager. This is an
             // asynchronous call and the calling activity is notified with a
             // callback on PeerListListener.onPeersAvailable()
             if (manager != null) {
-                if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    return;
-                }
-                manager.requestPeers(channel, (WifiP2pManager.PeerListListener) activity.getFragmentManager()
-                        .findFragmentById(R.id.avail_list_frag));
 
             }
-            Log.d("Send Wifi BR", "P2P peers changed");
+            Log.d("Recv Wifi BR", "P2P peers changed");
         } else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {
             if (manager == null) {
                 return;
@@ -88,10 +76,8 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
             }
 
         } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {
-            DeviceListFragment fragment = (DeviceListFragment) activity.getFragmentManager()
-                    .findFragmentById(R.id.avail_list_frag);
-            fragment.updateThisDevice((WifiP2pDevice) intent.getParcelableExtra(
-                    WifiP2pManager.EXTRA_WIFI_P2P_DEVICE));
+
         }
     }
 }
+

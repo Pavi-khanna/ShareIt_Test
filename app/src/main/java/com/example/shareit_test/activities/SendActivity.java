@@ -39,7 +39,7 @@ import static android.content.ContentValues.TAG;
 public class SendActivity extends Activity implements WifiP2pManager.ChannelListener, DeviceListFragment.DeviceActionListener {
 
     //ListView senderListView;
-    Button createhotspot;
+    Button createhotspot,selectfilebutton;
     WifiP2pManager.Channel channel;
     WifiP2pManager manager;
     private boolean isWifiP2pEnabled = false;
@@ -50,6 +50,8 @@ public class SendActivity extends Activity implements WifiP2pManager.ChannelList
     private WifiP2pConfig group_config;
     private WifiP2pConfig.Builder config_builder;
     private Intent browseFilesIntent;
+
+
     /**
      * @param isWifiP2pEnabled the isWifiP2pEnabled to set
      */
@@ -64,6 +66,7 @@ public class SendActivity extends Activity implements WifiP2pManager.ChannelList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send);
         createhotspot = findViewById(R.id.hotspot);
+        selectfilebutton = findViewById(R.id.select_file);
         //senderListView = findViewById(R.id.avail_devices_list);
 
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
@@ -135,6 +138,12 @@ public class SendActivity extends Activity implements WifiP2pManager.ChannelList
             }
         });
 
+        selectfilebutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(browseFilesIntent);
+            }
+        });
 
         final DeviceListFragment fragment = (DeviceListFragment) getFragmentManager()
                 .findFragmentById(R.id.avail_list_frag);
@@ -203,7 +212,6 @@ public class SendActivity extends Activity implements WifiP2pManager.ChannelList
                 browseFilesIntent.putExtra("IP", config.deviceAddress);
 
             }
-
             @Override
             public void onFailure(int reason) {
                 Toast.makeText(SendActivity.this, "Connect failed. Retry.",
@@ -212,9 +220,16 @@ public class SendActivity extends Activity implements WifiP2pManager.ChannelList
         });
     }
 
-    public void starBrowse(){
-        startActivity(browseFilesIntent);
+
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.disconnect();
+        Toast.makeText(SendActivity.this, "Disconnecting with the Peer",
+                Toast.LENGTH_SHORT).show();
     }
+
     @Override
     public void disconnect() {
         manager.removeGroup(channel, new WifiP2pManager.ActionListener() {

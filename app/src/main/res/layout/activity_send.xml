@@ -47,14 +47,38 @@ android:layout_height="fill_parent">
         android:id="@+id/avail_list_frag"
         class="com.example.shareit_test.activities.DeviceListFragment"
         android:layout_width="match_parent"
-        android:layout_height="691dp">
+        android:layout_height="500dp">
         <!-- Preview: layout=@layout/row_devices -->
     </fragment>
 
-    <Button
-        android:id="@+id/hotspot"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/hotspot" />
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/select_file"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="306dp"
+            android:layout_marginLeft="306dp"
+            android:layout_marginBottom="0dp"
+            android:text="@string/select_file" />
+
+        <Button
+            android:id="@+id/hotspot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="190dp"
+            android:text="@string/hotspot" />
+    </RelativeLayout>
 
 </LinearLayout>

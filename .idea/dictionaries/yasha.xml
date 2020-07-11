@@ -2,6 +2,7 @@
   <dictionary name="yasha">
     <words>
       <w>createhotspot</w>
+      <w>selectfilebutton</w>
     </words>
   </dictionary>
 </component>
