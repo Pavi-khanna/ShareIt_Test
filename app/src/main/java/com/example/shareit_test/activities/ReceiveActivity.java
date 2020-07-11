@@ -1,16 +1,20 @@
 package com.example.shareit_test.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import androidx.core.app.ActivityCompat;
 
 import com.example.shareit_test.R;
 
@@ -55,6 +59,30 @@ public class ReceiveActivity extends Activity implements WifiP2pManager.ChannelL
         manager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
         channel = manager.initialize(this, getMainLooper(), null);
 
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        manager.discoverPeers(channel, new WifiP2pManager.ActionListener() {
+            @Override
+            public void onSuccess() {
+                Toast.makeText(ReceiveActivity.this, "Discovery Initiated",
+                        Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(int reasonCode) {
+                Toast.makeText(ReceiveActivity.this, "Discovery Failed : " + reasonCode,
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     /** register the BroadcastReceiver with the intent values to be matched */
@@ -71,8 +99,28 @@ public class ReceiveActivity extends Activity implements WifiP2pManager.ChannelL
         unregisterReceiver(receiver);
     }
 
+
+
     @Override
     public void onChannelDisconnected() {
 
+    }
+
+    public void makeToast(int i) {
+        if(i == 1){
+            Toast.makeText(this,"P2P state changed",Toast.LENGTH_SHORT).show();
+        }
+        else if(i==2){
+            Toast.makeText(this,"P2P peers changed",Toast.LENGTH_SHORT).show();
+
+        }
+        else if(i==3){
+            Toast.makeText(this,"P2P is connected",Toast.LENGTH_SHORT).show();
+
+        }
+        else if(i==4){
+            Toast.makeText(this,"Peers available",Toast.LENGTH_SHORT).show();
+
+        }
     }
 }

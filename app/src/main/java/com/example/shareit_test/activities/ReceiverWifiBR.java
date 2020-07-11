@@ -1,12 +1,14 @@
 package com.example.shareit_test.activities;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.NetworkInfo;
 import android.net.wifi.p2p.WifiP2pDevice;
+import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.util.Log;
 
@@ -38,6 +40,7 @@ public class ReceiverWifiBR extends BroadcastReceiver {
      * @see android.content.BroadcastReceiver#onReceive(android.content.Context,
      * android.content.Intent)
      */
+    @SuppressLint("MissingPermission")
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
@@ -52,14 +55,21 @@ public class ReceiverWifiBR extends BroadcastReceiver {
                 //activity.resetData();
             }
             Log.d("Receive Activity", "P2P state changed - " + state);
+            activity.makeToast(1);
         } else if (WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action)) {
             // request available peers from the wifi p2p manager. This is an
             // asynchronous call and the calling activity is notified with a
             // callback on PeerListListener.onPeersAvailable()
             if (manager != null) {
-
+                manager.requestPeers(channel, new WifiP2pManager.PeerListListener() {
+                    @Override
+                    public void onPeersAvailable(WifiP2pDeviceList wifiP2pDeviceList) {
+                        activity.makeToast(4);
+                    }
+                });
             }
             Log.d("Recv Wifi BR", "P2P peers changed");
+            activity.makeToast(2);
         } else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {
             if (manager == null) {
                 return;
@@ -69,7 +79,7 @@ public class ReceiverWifiBR extends BroadcastReceiver {
             if (networkInfo.isConnected()) {
                 // we are connected with the other device, request connection
                 // info to find group owner IP
-
+                activity.makeToast(3);
             } else {
                 // It's a disconnect
                 //activity.resetData();
