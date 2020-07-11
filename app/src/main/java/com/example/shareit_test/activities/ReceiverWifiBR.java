@@ -10,8 +10,10 @@ import android.net.NetworkInfo;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pManager;
+import android.os.Build;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 
 import com.example.shareit_test.R;
@@ -74,15 +76,27 @@ public class ReceiverWifiBR extends BroadcastReceiver {
             if (manager == null) {
                 return;
             }
-            NetworkInfo networkInfo = (NetworkInfo) intent
-                    .getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
-            if (networkInfo.isConnected()) {
-                // we are connected with the other device, request connection
-                // info to find group owner IP
-                activity.makeToast(3);
-            } else {
-                // It's a disconnect
-                //activity.resetData();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                manager.requestNetworkInfo(channel, new WifiP2pManager.NetworkInfoListener() {
+                    @Override
+                    public void onNetworkInfoAvailable(@NonNull NetworkInfo networkInfo) {
+                        if (networkInfo.isConnected()) {
+                            // we are connected with the other device, request connection
+                            // info to find group owner IP
+                            String grpOwnerIP;
+                            activity.makeToast(3);
+                            //check if Group Owner(then become server)
+                            activity.makeServer();
+                            // else client
+                            activity.makeClient();
+                            //all server/client init calls go through Receive Activity
+                            //networkInfo.
+                        } else {
+                            // It's a disconnect
+                            activity.onChannelDisconnected();
+                        }
+                    }
+                });
             }
 
         } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {

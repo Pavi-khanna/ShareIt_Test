@@ -38,6 +38,7 @@ import static android.content.ContentValues.TAG;
 
 public class SendActivity extends Activity implements WifiP2pManager.ChannelListener, DeviceListFragment.DeviceActionListener {
 
+    private final int SENDER = 1;
     //ListView senderListView;
     Button createhotspot,selectfilebutton;
     WifiP2pManager.Channel channel;

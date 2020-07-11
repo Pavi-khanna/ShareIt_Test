@@ -79,8 +79,11 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
             NetworkInfo networkInfo = (NetworkInfo) intent
                     .getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
             if (networkInfo.isConnected()) {
+                //check if Group Owner(then become server) else client
                 // we are connected with the other device, request connection
                 // info to find group owner IP
+                //check if Group Owner(then become server) else client
+                //all server/client init calls go through Send Activity
 
             } else {
                 // It's a disconnect

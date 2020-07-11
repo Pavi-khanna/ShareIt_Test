@@ -22,6 +22,7 @@ import java.util.ArrayList;
 
 public class ReceiveActivity extends Activity implements WifiP2pManager.ChannelListener {
 
+    private final int RECEIVER = 0;
     ListView receiverListView;
     WifiP2pManager.Channel channel;
     WifiP2pManager manager;
@@ -103,8 +104,21 @@ public class ReceiveActivity extends Activity implements WifiP2pManager.ChannelL
 
     @Override
     public void onChannelDisconnected() {
+        Toast.makeText(this,"Disconnected from Peer",Toast.LENGTH_SHORT).show();
+    }
+
+
+
+    public void makeServer(){
+        //Server(...,...,RECEIVER)
+    }
+
+
+    public void makeClient(){
+        //Client(...,...,IP,RECEIVER)
 
     }
+
 
     public void makeToast(int i) {
         if(i == 1){
