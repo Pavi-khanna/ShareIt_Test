@@ -18,7 +18,7 @@ public class ReceiverWifiBR extends BroadcastReceiver {
 
     private WifiP2pManager manager;
     private WifiP2pManager.Channel channel;
-    private SendActivity activity;
+    private ReceiveActivity activity;
 
     /**
      * @param manager WifiP2pManager system service
@@ -26,7 +26,7 @@ public class ReceiverWifiBR extends BroadcastReceiver {
      * @param activity activity associated with the receiver
      */
     public ReceiverWifiBR(WifiP2pManager manager, WifiP2pManager.Channel channel,
-                                 SendActivity activity) {
+                          ReceiveActivity activity) {
         super();
         this.manager = manager;
         this.channel = channel;
@@ -49,7 +49,7 @@ public class ReceiverWifiBR extends BroadcastReceiver {
                 activity.setIsWifiP2pEnabled(true);
             } else {
                 activity.setIsWifiP2pEnabled(false);
-                activity.resetData();
+                //activity.resetData();
             }
             Log.d("Receive Activity", "P2P state changed - " + state);
         } else if (WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action)) {
@@ -72,7 +72,7 @@ public class ReceiverWifiBR extends BroadcastReceiver {
 
             } else {
                 // It's a disconnect
-                activity.resetData();
+                //activity.resetData();
             }
 
         } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {

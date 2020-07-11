@@ -57,7 +57,19 @@ public class ReceiveActivity extends Activity implements WifiP2pManager.ChannelL
 
     }
 
+    /** register the BroadcastReceiver with the intent values to be matched */
+    @Override
+    public void onResume() {
+        super.onResume();
+        receiver = new ReceiverWifiBR(manager, channel, this);
+        registerReceiver(receiver, intentFilter);
+    }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        unregisterReceiver(receiver);
+    }
 
     @Override
     public void onChannelDisconnected() {
