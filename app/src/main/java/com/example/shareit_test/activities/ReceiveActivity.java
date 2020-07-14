@@ -111,6 +111,7 @@ public class ReceiveActivity extends Activity implements WifiP2pManager.ChannelL
 
     public void makeServer(){
         //Server(...,...,RECEIVER)
+
     }
 
 

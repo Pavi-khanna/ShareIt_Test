@@ -42,6 +42,16 @@ public class Server extends AsyncTask<Void,Double,String> {
 
             Socket client = serverSocket.accept();
 
+            if(recv_or_send == SENDER){
+                //i am the sender
+                //start listening and wait for client to send
+
+            }
+            else if(recv_or_send == RECEIVER){
+                //i am the receiver
+                //establish connection to the group owner and start sending
+
+            }
             /**
              * If this code is reached, a client has connected and transferred data
              * Save the input stream from the client as a JPEG file

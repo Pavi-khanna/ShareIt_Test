@@ -75,10 +75,7 @@ public class MainActivity extends AppCompatActivity {
                         perm_codes[i]);
             }
             else {
-                Toast.makeText(MainActivity.this,
-                        "Permission already granted: "+perm_codes[i],
-                        Toast.LENGTH_SHORT)
-                        .show();
+                //Toast.makeText(MainActivity.this,"Permission already granted: "+perm_codes[i],Toast.LENGTH_SHORT).show();
             }
             i++;
         }

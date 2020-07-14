@@ -6,13 +6,28 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.NetworkInfo;
+import android.net.wifi.WifiManager;
 import android.net.wifi.p2p.WifiP2pDevice;
+import android.net.wifi.p2p.WifiP2pGroup;
 import android.net.wifi.p2p.WifiP2pManager;
+import android.os.Build;
+import android.text.format.Formatter;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 
 import com.example.shareit_test.R;
+
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.UnknownHostException;
+import java.util.Enumeration;
+
+import static android.content.Context.WIFI_SERVICE;
 
 public class WifiBroadcastReceiver extends BroadcastReceiver {
 
@@ -40,7 +55,7 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
      */
     @Override
     public void onReceive(Context context, Intent intent) {
-        String action = intent.getAction();
+        final String action = intent.getAction();
         if (WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION.equals(action)) {
             // UI update to indicate wifi p2p status.
             int state = intent.getIntExtra(WifiP2pManager.EXTRA_WIFI_STATE, -1);
@@ -70,17 +85,43 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
                 manager.requestPeers(channel, (WifiP2pManager.PeerListListener) activity.getFragmentManager()
                         .findFragmentById(R.id.avail_list_frag));
 
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    manager.requestNetworkInfo(channel, new WifiP2pManager.NetworkInfoListener() {
+                        @Override
+                        public void onNetworkInfoAvailable(@NonNull NetworkInfo networkInfo) {
+                            Log.d("Send WIFI BR",networkInfo.toString());
+                            activity.makeToast(networkInfo.toString());
+                        }
+                    });
+                }
+
             }
             Log.d("Send Wifi BR", "P2P peers changed");
         } else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {
             if (manager == null) {
                 return;
             }
-            NetworkInfo networkInfo = (NetworkInfo) intent
+            final NetworkInfo networkInfo = (NetworkInfo) intent
                     .getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
+
             if (networkInfo.isConnected()) {
                 //check if Group Owner(then become server) else client
                 // we are connected with the other device, request connection
+                manager.requestGroupInfo(channel, new WifiP2pManager.GroupInfoListener() {
+                    @Override
+                    public void onGroupInfoAvailable(WifiP2pGroup wifiP2pGroup) {
+                        Log.d("Send WIFI BR group info",networkInfo.getExtraInfo().toString());
+                    }
+                });
+                String myIP = Utils.getMyIP();
+                String ownerIP = null;
+                if(ownerIP.equals(myIP)){
+                    // i am the owner
+                    activity.makeServer();
+                } else {
+                    // else client
+                    activity.makeClient();
+                }
                 // info to find group owner IP
                 //check if Group Owner(then become server) else client
                 //all server/client init calls go through Send Activity

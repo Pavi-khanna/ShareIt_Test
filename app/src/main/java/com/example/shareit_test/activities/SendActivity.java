@@ -51,6 +51,7 @@ public class SendActivity extends Activity implements WifiP2pManager.ChannelList
     private WifiP2pConfig group_config;
     private WifiP2pConfig.Builder config_builder;
     private Intent browseFilesIntent;
+    private boolean connectionReady = false;
 
 
     /**
@@ -78,7 +79,9 @@ public class SendActivity extends Activity implements WifiP2pManager.ChannelList
         manager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
         channel = manager.initialize(this, getMainLooper(), null);
 
-
+        Utils util = new Utils();
+        String myIP = Utils.getMyIP();
+        makeToast("My IP:" + myIP);
         ArrayList<String> senderArrayList = new ArrayList<>();
         senderArrayList.add("IP 1");
         senderArrayList.add("IP 2");
@@ -142,7 +145,11 @@ public class SendActivity extends Activity implements WifiP2pManager.ChannelList
         selectfilebutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(browseFilesIntent);
+                if(connectionReady) {
+                    startActivity(browseFilesIntent);
+                } else {
+                    makeToast("No Peer Connection Established");
+                }
             }
         });
 
@@ -211,7 +218,7 @@ public class SendActivity extends Activity implements WifiP2pManager.ChannelList
             public void onSuccess() {
                 // WiFiDirectBroadcastReceiver will notify us. Ignore for now.
                 browseFilesIntent.putExtra("IP", config.deviceAddress);
-
+                connectionReady = true;
             }
             @Override
             public void onFailure(int reason) {
@@ -236,6 +243,7 @@ public class SendActivity extends Activity implements WifiP2pManager.ChannelList
         manager.removeGroup(channel, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
+                connectionReady = false;
                 // later
             }
             @Override
@@ -302,5 +310,19 @@ public class SendActivity extends Activity implements WifiP2pManager.ChannelList
                 });
             }
         }
+    }
+
+    public void makeToast(String msg) {
+        Toast.makeText(SendActivity.this,
+                msg,
+                Toast.LENGTH_LONG).show();
+    }
+
+    public void makeServer() {
+
+    }
+
+    public void makeClient() {
+
     }
 }

@@ -86,9 +86,15 @@ public class ReceiverWifiBR extends BroadcastReceiver {
                             String grpOwnerIP;
                             activity.makeToast(3);
                             //check if Group Owner(then become server)
-                            activity.makeServer();
-                            // else client
-                            activity.makeClient();
+                            String myIP = Utils.getMyIP();
+                            String ownerIP = null;
+                            if(ownerIP.equals(myIP)){
+                                // i am the owner
+                                activity.makeServer();
+                            } else {
+                                // else client
+                                activity.makeClient();
+                            }
                             //all server/client init calls go through Receive Activity
                             //networkInfo.
                         } else {
