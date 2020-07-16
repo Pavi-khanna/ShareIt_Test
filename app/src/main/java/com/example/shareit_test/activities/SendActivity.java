@@ -318,11 +318,14 @@ public class SendActivity extends Activity implements WifiP2pManager.ChannelList
                 Toast.LENGTH_LONG).show();
     }
 
-    public void makeServer() {
-
+    public void makeServer(){
+        // TODO: create a textView for display and call the server AyncTask
+        //new Server(this, textView, RECEIVER, filepath;
     }
 
-    public void makeClient() {
 
+    public void makeClient(String destIP){
+        // TODO: create a textView for display and call the server AyncTask
+        //new Client(this, textView, RECEIVER, destIP, filepath);
     }
 }

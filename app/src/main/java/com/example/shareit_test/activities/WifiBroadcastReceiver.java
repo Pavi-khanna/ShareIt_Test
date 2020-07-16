@@ -113,18 +113,20 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
                         Log.d("Send WIFI BR group info",networkInfo.getExtraInfo().toString());
                     }
                 });
-                String myIP = Utils.getMyIP();
-                String ownerIP = null;
-                if(ownerIP.equals(myIP)){
-                    // i am the owner
-                    activity.makeServer();
-                } else {
-                    // else client
-                    activity.makeClient();
-                }
                 // info to find group owner IP
                 //check if Group Owner(then become server) else client
                 //all server/client init calls go through Send Activity
+                String myIP = Utils.getMyIP();
+                String ownerIP = null; // TODO: how to get the IP of the Group OWNER? Need to test
+                if(ownerIP.equals(myIP)){
+                    // i am the owner
+                    //activity.makeServer();
+
+                } else {
+                    // else client
+                    //activity.makeClient();
+                }
+
 
             } else {
                 // It's a disconnect

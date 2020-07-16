@@ -19,7 +19,7 @@ import com.example.shareit_test.activities.ui.main.SectionsPagerAdapter;
 
 public class BrowseFilesActivity extends AppCompatActivity {
 
-    String path;
+    private String filepath = null;
     private WifiP2pConfig dest_config;
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -28,7 +28,7 @@ public class BrowseFilesActivity extends AppCompatActivity {
         switch (requestCode) {
             case 1001:
                 if (resultCode == RESULT_OK) {
-                    path = data.getData().getPath();
+                    filepath = data.getData().getPath();
                 }
                 break;
         }
@@ -48,7 +48,7 @@ public class BrowseFilesActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         dest_config = new WifiP2pConfig();
-        dest_config.deviceAddress = intent.getStringExtra("IP");
+        dest_config.deviceAddress = intent.getStringExtra("IP"); // this is the device MAC which has no use case right now
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,9 +62,10 @@ public class BrowseFilesActivity extends AppCompatActivity {
                 filesOpener.setType("*/*");
                 startActivityForResult(filesOpener, 1001);
 
-                Snackbar.make(view, path, Snackbar.LENGTH_LONG)
+                Snackbar.make(view, filepath, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
     }
+
 }
