@@ -124,7 +124,7 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
 
                 } else {
                     // else client
-                    activity.makeClient(ownerIP);
+                    //activity.makeClient(ownerIP);
                 }
 
 

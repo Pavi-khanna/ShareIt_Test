@@ -98,13 +98,10 @@ public class ReceiverWifiBR extends BroadcastReceiver {
                 if(ownerIP.equals(myIP)){
                     // i am the owner
                     activity.makeServer();
-
                 } else {
                     // else client
-                    activity.makeClient(ownerIP);
+                    //activity.makeClient(ownerIP);
                 }
-
-
             } else {
                 // It's a disconnect
                 activity.onChannelDisconnected();
