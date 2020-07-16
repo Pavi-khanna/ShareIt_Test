@@ -20,6 +20,7 @@ import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.format.Formatter;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -79,8 +80,8 @@ public class SendActivity extends Activity implements WifiP2pManager.ChannelList
         manager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
         channel = manager.initialize(this, getMainLooper(), null);
 
-        Utils util = new Utils();
-        String myIP = Utils.getMyIP();
+        WifiManager wm = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+        String myIP = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
         makeToast("My IP:" + myIP);
         ArrayList<String> senderArrayList = new ArrayList<>();
         senderArrayList.add("IP 1");

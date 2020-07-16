@@ -122,9 +122,12 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
                 // info to find group owner IP
                 //check if Group Owner(then become server) else client
                 //all server/client init calls go through Send Activity
-                String myIP = Utils.getMyIP();
+                //String myIP = Utils.getMyIP();
 
+                WifiManager wm = (WifiManager) context.getApplicationContext().getSystemService(WIFI_SERVICE);
+                String myIP = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
 
+                /*
                 if(ownerIP.equals(myIP)){
                     // i am the owner
                     activity.makeServer();
@@ -132,7 +135,7 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
                     // else client
                     activity.makeClient(ownerIP);
                 }
-
+                */
 
 
             } else {
