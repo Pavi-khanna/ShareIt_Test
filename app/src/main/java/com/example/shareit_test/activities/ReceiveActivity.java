@@ -1,16 +1,18 @@
 package com.example.shareit_test.activities;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.net.wifi.p2p.WifiP2pConfig;
+import android.net.wifi.ScanResult;
+import android.net.wifi.WifiManager;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -19,6 +21,8 @@ import androidx.core.app.ActivityCompat;
 import com.example.shareit_test.R;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
 
 public class ReceiveActivity extends Activity implements WifiP2pManager.ChannelListener {
 
@@ -31,6 +35,8 @@ public class ReceiveActivity extends Activity implements WifiP2pManager.ChannelL
     private final IntentFilter intentFilter = new IntentFilter();
     private BroadcastReceiver receiver = null;
     private WifiP2pManager.ActionListener ActionListener;
+    WifiManager wifiManager;
+    ArrayList<String> senderArrayList;
 
     public void setIsWifiP2pEnabled(boolean isWifiP2pEnabled) {
         this.isWifiP2pEnabled = isWifiP2pEnabled;
@@ -43,15 +49,25 @@ public class ReceiveActivity extends Activity implements WifiP2pManager.ChannelL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_receive);
 
-        /*
-        receiverListView = findViewById(R.id.list_receive);
-        ArrayList<String> senderArrayList = new ArrayList<>();
-        senderArrayList.add("IP 1");
-        senderArrayList.add("IP 2");
 
-        ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,senderArrayList);
-        receiverListView.setAdapter(arrayAdapter);
-         */
+        receiverListView = findViewById(R.id.list_receive);
+        senderArrayList = new ArrayList<String>();
+
+        /*wifiManager = (WifiManager)
+                getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
+        getApplicationContext().registerReceiver(wifiScanReceiver, intentFilter);
+
+        boolean success = wifiManager.startScan();
+        */
+
+        //ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,senderArrayList);
+        //receiverListView.setAdapter(arrayAdapter);
+        //senderArrayList.add("IP 1");
+        //senderArrayList.add("IP 2");
+
+
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
@@ -122,6 +138,11 @@ public class ReceiveActivity extends Activity implements WifiP2pManager.ChannelL
         //new Client(this, textView,RECEIVER,destIP,null);
     }
 
+    public void makeToast(String msg) {
+        Toast.makeText(ReceiveActivity.this,
+                msg,
+                Toast.LENGTH_LONG).show();
+    }
 
     public void makeToast(int i) {
         if(i == 1){
@@ -139,5 +160,34 @@ public class ReceiveActivity extends Activity implements WifiP2pManager.ChannelL
             Toast.makeText(this,"Peers available",Toast.LENGTH_SHORT).show();
 
         }
+    }
+    BroadcastReceiver wifiScanReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context c, Intent intent) {
+            boolean success = intent.getBooleanExtra(
+                    WifiManager.EXTRA_RESULTS_UPDATED, false);
+            if (success) {
+                scanSuccess();
+            } else {
+                // scan failure handling
+                scanFailure();
+            }
+        }
+    };
+
+    private void scanSuccess() {
+        List<ScanResult> results = wifiManager.getScanResults();
+        ListIterator<ScanResult> listIterator = results.listIterator();
+        while (listIterator.hasNext()){
+            senderArrayList.add(listIterator.next().SSID);
+        }
+        Log.d("Receiver Wifi scan",senderArrayList.toString());
+    }
+
+    private void scanFailure() {
+        // handle failure: new scan did NOT succeed
+        // consider using old scan results: these are the OLD results!
+        List<ScanResult> results = wifiManager.getScanResults();
+
     }
 }

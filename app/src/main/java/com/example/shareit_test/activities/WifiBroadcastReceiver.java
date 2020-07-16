@@ -111,6 +111,7 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
             if (networkInfo.isConnected()) {
                 //check if Group Owner(then become server) else client
                 // we are connected with the other device, request connection
+
                 manager.requestConnectionInfo(channel, new WifiP2pManager.ConnectionInfoListener() {
                     @Override
                     public void onConnectionInfoAvailable(WifiP2pInfo wifiP2pInfo) {
@@ -122,11 +123,8 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
                 // info to find group owner IP
                 //check if Group Owner(then become server) else client
                 //all server/client init calls go through Send Activity
-                //String myIP = Utils.getMyIP();
-
-                WifiManager wm = (WifiManager) context.getApplicationContext().getSystemService(WIFI_SERVICE);
-                String myIP = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
-
+                String myIP = Utils.getMyIP();
+                activity.makeToast("MY IP:"+myIP);
                 /*
                 if(ownerIP.equals(myIP)){
                     // i am the owner

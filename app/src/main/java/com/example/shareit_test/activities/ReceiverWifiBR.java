@@ -85,7 +85,7 @@ public class ReceiverWifiBR extends BroadcastReceiver {
 
             if (networkInfo.isConnected()) {
                 //check if Group Owner(then become server) else client
-                // we are connected with the other device, request connection
+                // we are connected with the other device, request connection info
                 manager.requestConnectionInfo(channel, new WifiP2pManager.ConnectionInfoListener() {
                     @Override
                     public void onConnectionInfoAvailable(WifiP2pInfo wifiP2pInfo) {
@@ -98,8 +98,8 @@ public class ReceiverWifiBR extends BroadcastReceiver {
                 //check if Group Owner(then become server) else client
                 //all server/client init calls go through Send Activity
                 String myIP = Utils.getMyIP();
-
-
+                activity.makeToast("MY IP:"+myIP);
+                /*
                 if(ownerIP.equals(myIP)){
                     // i am the owner
                     activity.makeServer();
@@ -107,6 +107,7 @@ public class ReceiverWifiBR extends BroadcastReceiver {
                     // else client
                     activity.makeClient(ownerIP);
                 }
+                 */
 
             } else {
                 // It's a disconnect

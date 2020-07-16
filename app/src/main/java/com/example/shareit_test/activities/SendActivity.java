@@ -20,6 +20,7 @@ import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.text.format.Formatter;
 import android.util.Log;
 import android.view.View;
@@ -33,6 +34,7 @@ import android.widget.Toast;
 import com.example.shareit_test.activities.DeviceListFragment.DeviceActionListener;
 import com.example.shareit_test.R;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import static android.content.ContentValues.TAG;
@@ -80,9 +82,9 @@ public class SendActivity extends Activity implements WifiP2pManager.ChannelList
         manager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
         channel = manager.initialize(this, getMainLooper(), null);
 
-        WifiManager wm = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
-        String myIP = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
-        makeToast("My IP:" + myIP);
+
+
+
         ArrayList<String> senderArrayList = new ArrayList<>();
         senderArrayList.add("IP 1");
         senderArrayList.add("IP 2");
@@ -328,5 +330,36 @@ public class SendActivity extends Activity implements WifiP2pManager.ChannelList
     public void makeClient(String destIP){
         // TODO: create a textView for display and call the server AyncTask
         //new Client(this, textView, RECEIVER, destIP, filepath);
+    }
+
+    public void setMobileDataState(boolean mobileDataEnabled)
+    {
+        try
+        {
+            TelephonyManager telephonyService = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+            Method setMobileDataEnabledMethod = telephonyService.getClass().getDeclaredMethod("setDataEnabled", boolean.class);
+            setMobileDataEnabledMethod.invoke(telephonyService, mobileDataEnabled);
+        }
+        catch (Exception ex)
+        {
+            Log.e(TAG, "Error setting mobile data state", ex);
+        }
+    }
+
+    public boolean getMobileDataState()
+    {
+        try
+        {
+            TelephonyManager telephonyService = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+            Method getMobileDataEnabledMethod = telephonyService.getClass().getDeclaredMethod("getDataEnabled");
+            boolean mobileDataEnabled = (Boolean) getMobileDataEnabledMethod.invoke(telephonyService);
+            return mobileDataEnabled;
+        }
+        catch (Exception ex)
+        {
+            Log.e(TAG, "Error getting mobile data state", ex);
+        }
+
+        return false;
     }
 }
