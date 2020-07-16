@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.net.NetworkInfo;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
+import android.net.wifi.p2p.WifiP2pGroup;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Build;
 import android.util.Log;
@@ -79,21 +80,27 @@ public class ReceiverWifiBR extends BroadcastReceiver {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 manager.requestNetworkInfo(channel, new WifiP2pManager.NetworkInfoListener() {
                     @Override
-                    public void onNetworkInfoAvailable(@NonNull NetworkInfo networkInfo) {
+                    public void onNetworkInfoAvailable(@NonNull final NetworkInfo networkInfo) {
                         if (networkInfo.isConnected()) {
                             // we are connected with the other device, request connection
                             // info to find group owner IP
-                            String grpOwnerIP;
+                            String ownerIP = null;
                             activity.makeToast(3);
+                            manager.requestGroupInfo(channel, new WifiP2pManager.GroupInfoListener() {
+                                @Override
+                                public void onGroupInfoAvailable(WifiP2pGroup wifiP2pGroup) {
+                                    Log.d("Send WIFI BR group info",networkInfo.getExtraInfo().toString());
+                                }
+                            });
                             //check if Group Owner(then become server)
                             String myIP = Utils.getMyIP();
-                            String ownerIP = null;
+
                             if(ownerIP.equals(myIP)){
                                 // i am the owner
                                 activity.makeServer();
                             } else {
                                 // else client
-                                activity.makeClient();
+                                activity.makeClient(ownerIP);
                             }
                             //all server/client init calls go through Receive Activity
                             //networkInfo.
