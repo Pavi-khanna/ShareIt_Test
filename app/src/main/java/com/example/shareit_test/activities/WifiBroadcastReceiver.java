@@ -9,6 +9,7 @@ import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pGroup;
+import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Build;
 import android.text.format.Formatter;
@@ -34,6 +35,7 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
     private WifiP2pManager manager;
     private WifiP2pManager.Channel channel;
     private SendActivity activity;
+    private String ownerIP;
 
     /**
      * @param manager WifiP2pManager system service
@@ -101,24 +103,28 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
             if (manager == null) {
                 return;
             }
+
             final NetworkInfo networkInfo = (NetworkInfo) intent
                     .getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
 
+            assert networkInfo != null;
             if (networkInfo.isConnected()) {
                 //check if Group Owner(then become server) else client
                 // we are connected with the other device, request connection
-                manager.requestGroupInfo(channel, new WifiP2pManager.GroupInfoListener() {
+                manager.requestConnectionInfo(channel, new WifiP2pManager.ConnectionInfoListener() {
                     @Override
-                    public void onGroupInfoAvailable(WifiP2pGroup wifiP2pGroup) {
-                        Log.d("Send WIFI BR group info",networkInfo.getExtraInfo().toString());
+                    public void onConnectionInfoAvailable(WifiP2pInfo wifiP2pInfo) {
+
+                        ownerIP = wifiP2pInfo.groupOwnerAddress.getHostAddress();
+                        Log.d("Owner IP:",ownerIP);
                     }
                 });
                 // info to find group owner IP
                 //check if Group Owner(then become server) else client
                 //all server/client init calls go through Send Activity
                 String myIP = Utils.getMyIP();
-                String ownerIP = null; // TODO: how to get the IP of the Group OWNER? Need to test
-                /*
+
+
                 if(ownerIP.equals(myIP)){
                     // i am the owner
                     activity.makeServer();
@@ -126,7 +132,7 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
                     // else client
                     activity.makeClient(ownerIP);
                 }
-                 */
+
 
 
             } else {
