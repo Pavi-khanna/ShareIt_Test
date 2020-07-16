@@ -77,39 +77,37 @@ public class ReceiverWifiBR extends BroadcastReceiver {
             if (manager == null) {
                 return;
             }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                manager.requestNetworkInfo(channel, new WifiP2pManager.NetworkInfoListener() {
-                    @Override
-                    public void onNetworkInfoAvailable(@NonNull final NetworkInfo networkInfo) {
-                        if (networkInfo.isConnected()) {
-                            // we are connected with the other device, request connection
-                            // info to find group owner IP
-                            String ownerIP = null;
-                            activity.makeToast(3);
-                            manager.requestGroupInfo(channel, new WifiP2pManager.GroupInfoListener() {
-                                @Override
-                                public void onGroupInfoAvailable(WifiP2pGroup wifiP2pGroup) {
-                                    Log.d("Send WIFI BR group info",networkInfo.getExtraInfo().toString());
-                                }
-                            });
-                            //check if Group Owner(then become server)
-                            String myIP = Utils.getMyIP();
 
-                            if(ownerIP.equals(myIP)){
-                                // i am the owner
-                                activity.makeServer();
-                            } else {
-                                // else client
-                                activity.makeClient(ownerIP);
-                            }
-                            //all server/client init calls go through Receive Activity
-                            //networkInfo.
-                        } else {
-                            // It's a disconnect
-                            activity.onChannelDisconnected();
-                        }
+            final NetworkInfo networkInfo = (NetworkInfo) intent
+                    .getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
+
+            if (networkInfo.isConnected()) {
+                //check if Group Owner(then become server) else client
+                // we are connected with the other device, request connection
+                manager.requestGroupInfo(channel, new WifiP2pManager.GroupInfoListener() {
+                    @Override
+                    public void onGroupInfoAvailable(WifiP2pGroup wifiP2pGroup) {
+                        Log.d("Receiver group INFO",networkInfo.getExtraInfo().toString());
                     }
                 });
+                // info to find group owner IP
+                //check if Group Owner(then become server) else client
+                //all server/client init calls go through Send Activity
+                String myIP = Utils.getMyIP();
+                String ownerIP = null; // TODO: how to get the IP of the Group OWNER? Need to test
+                if(ownerIP.equals(myIP)){
+                    // i am the owner
+                    activity.makeServer();
+
+                } else {
+                    // else client
+                    activity.makeClient(ownerIP);
+                }
+
+
+            } else {
+                // It's a disconnect
+                activity.onChannelDisconnected();
             }
 
         } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {
