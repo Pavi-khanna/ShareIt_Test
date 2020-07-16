@@ -95,13 +95,15 @@ public class ReceiverWifiBR extends BroadcastReceiver {
                 //all server/client init calls go through Send Activity
                 String myIP = Utils.getMyIP();
                 String ownerIP = null; // TODO: how to get the IP of the Group OWNER? Need to test
+                /*
                 if(ownerIP.equals(myIP)){
                     // i am the owner
                     activity.makeServer();
                 } else {
                     // else client
-                    //activity.makeClient(ownerIP);
+                    activity.makeClient(ownerIP);
                 }
+                 */
             } else {
                 // It's a disconnect
                 activity.onChannelDisconnected();
