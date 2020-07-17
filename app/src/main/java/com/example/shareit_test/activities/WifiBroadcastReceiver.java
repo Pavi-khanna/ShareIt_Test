@@ -125,7 +125,7 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
                 //all server/client init calls go through Send Activity
                 String myIP = Utils.getMyIP();
                 activity.makeToast("MY IP:"+myIP);
-                /*
+
                 if(ownerIP.equals(myIP)){
                     // i am the owner
                     activity.makeServer();
@@ -133,7 +133,7 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
                     // else client
                     activity.makeClient(ownerIP);
                 }
-                */
+
 
 
             } else {
