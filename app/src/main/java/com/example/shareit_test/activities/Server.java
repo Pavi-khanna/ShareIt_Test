@@ -86,8 +86,7 @@ public class Server extends AsyncTask<Void,Double,String> {
                 //i am the receiver
                 //start listening and wait for client to send
 
-                final File f = new File(Environment.getExternalStorageDirectory() + "/"
-                        + context.getPackageName() + "/ShareIt_test-" + System.currentTimeMillis()
+                final File f = new File(Environment.getExternalStorageState() + "/ShareIt_test-" + System.currentTimeMillis()
                         + ".mp4");
 
                 File dirs = new File(f.getParent());

@@ -101,8 +101,7 @@ public class Client extends AsyncTask<Void,Double,String> {
                 //i am the receiver
                 //connected... now read the input stream to receive
 
-                final File f = new File(Environment.getExternalStorageDirectory() + "/"
-                        + context.getPackageName() + "/ShareIt_test-" + System.currentTimeMillis()
+                final File f = new File(Environment.getExternalStorageDirectory() + "/ShareIt_test-" + System.currentTimeMillis()
                         + ".mp4");
 
                 File dirs = new File(f.getParent());

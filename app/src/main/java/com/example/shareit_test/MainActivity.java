@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private final int WIFI_STATE_CODE = 101;
     private final int INTERNET_ACCESS_CODE = 102;
     private final int ACCESS_MEDIA_CODE = 103;
+    private final int WRITE_EXTERNAL = 104;
 
 
 
@@ -37,8 +38,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_WIFI_STATE,Manifest.permission.INTERNET,
-                Manifest.permission.ACCESS_MEDIA_LOCATION};
-        int [] perm_codes = {FINE_LOC_CODE,WIFI_STATE_CODE,INTERNET_ACCESS_CODE,ACCESS_MEDIA_CODE};
+                Manifest.permission.ACCESS_MEDIA_LOCATION,Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        int [] perm_codes = {FINE_LOC_CODE,WIFI_STATE_CODE,INTERNET_ACCESS_CODE,ACCESS_MEDIA_CODE,WRITE_EXTERNAL};
         checkPermission(permissions,perm_codes);
 
         ActionBar actionBar = getSupportActionBar();
