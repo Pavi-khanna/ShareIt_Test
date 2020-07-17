@@ -343,13 +343,13 @@ public class SendActivity extends Activity implements WifiP2pManager.ChannelList
     }
 
     public void makeServer(){
-        // TODO: create a textView for display and call the server AyncTask
-        //new Server(this, textView, RECEIVER, filepath;
+        // TODO: create a textView for display and call the server AsyncTask
+        new Server(this, file_path, SENDER, file_path_string);
     }
 
 
     public void makeClient(String destIP){
-        // TODO: create a textView for display and call the server AyncTask
+        // TODO: create a textView for display and call the server AsyncTask
         //new Client(this, textView, RECEIVER, destIP, filepath);
     }
 
