@@ -56,6 +56,7 @@ public class Server extends AsyncTask<Void,Double,String> {
             //start listening
             client = serverSocket.accept();
 
+
             if (recv_or_send == SENDER) {
                 //i am the sender
                 //start listening for the client to make connection then start sending
@@ -71,6 +72,7 @@ public class Server extends AsyncTask<Void,Double,String> {
                     while ((len = inputStream.read(buf)) != -1) {
                         outputStream.write(buf, 0, len);
                     }
+                    statusText.setText("File Send Complete");
                     outputStream.close();
                     inputStream.close();
                 } catch (FileNotFoundException e) {
@@ -97,6 +99,7 @@ public class Server extends AsyncTask<Void,Double,String> {
                 copyFile(inputstream, new FileOutputStream(f));
                 inputstream.close();
                 serverSocket.close();
+                statusText.setText("File Received");
                 return f.getAbsolutePath();
             }
         } catch(IOException e){

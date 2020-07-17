@@ -57,6 +57,7 @@ public class Client extends AsyncTask<Void,Double,String> {
             while(numberOfTimesTried<10) {
                 try {
                     clientToServer = new Socket(destIP, 8888);
+                    Log.d("CLIENT","Connection Established with server");
                     break;
                 } catch (ConnectException e) {
                     Log.e("CLIENT", "Error while connecting. " + e.getMessage());
@@ -85,6 +86,7 @@ public class Client extends AsyncTask<Void,Double,String> {
                     while ((len = inputStream.read(buf)) != -1) {
                         outputStream.write(buf, 0, len);
                     }
+                    statusText.setText("File Send Complete");
                     outputStream.close();
                     inputStream.close();
                 } catch (FileNotFoundException e) {
@@ -110,6 +112,7 @@ public class Client extends AsyncTask<Void,Double,String> {
                 // not handling copyfile stream failure
                 copyFile(inputstream, new FileOutputStream(f));
                 inputstream.close();
+                statusText.setText("File Received");
                 return f.getAbsolutePath();
             }
         } catch(IOException e){
