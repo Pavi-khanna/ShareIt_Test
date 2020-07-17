@@ -52,7 +52,7 @@ public class Client extends AsyncTask<Void,Double,String> {
              * Create a server socket and wait for client connections. This
              * call blocks until a connection is accepted from a client
              */
-            int numberOfTimesTried = 0;
+            int numberOfTimesTried = 1;
             // Set server socket ip and port
             while(numberOfTimesTried<10) {
                 try {
@@ -68,10 +68,11 @@ public class Client extends AsyncTask<Void,Double,String> {
                 }
                 try {
                     Thread.sleep(5000); //milliseconds
+
                 } catch (InterruptedException e) {
                     Log.e("CLIENT","Interrupted before connection");
                 }
-                numberOfTimesTried++;
+                Log.d("CLIENT","Trying again:"+numberOfTimesTried++);
             }
 
 

@@ -131,14 +131,14 @@ public class ReceiveActivity extends Activity implements WifiP2pManager.ChannelL
     public void makeServer(){
         //Server(...,...,RECEIVER)
         //create a textView for display and call the server AyncTask
-        new Server(this, statusTextView,RECEIVER,null);
+        new Server(this, statusTextView,RECEIVER,null).doInBackground();
     }
 
 
     public void makeClient(String destIP){
         //Client(...,...,IP,RECEIVER)
         //create a textView for display and call the client AyncTask
-        new Client(this, statusTextView,RECEIVER,destIP,null);
+        new Client(this, statusTextView,RECEIVER,destIP,null).doInBackground();
     }
 
     public void makeToast(String msg) {
