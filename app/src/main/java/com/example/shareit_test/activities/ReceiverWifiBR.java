@@ -89,24 +89,24 @@ public class ReceiverWifiBR extends BroadcastReceiver {
                 manager.requestConnectionInfo(channel, new WifiP2pManager.ConnectionInfoListener() {
                     @Override
                     public void onConnectionInfoAvailable(WifiP2pInfo wifiP2pInfo) {
-
                         ownerIP = wifiP2pInfo.groupOwnerAddress.getHostAddress();
                         Log.d("Owner IP:",ownerIP);
+                        // info to find group owner IP
+                        //check if Group Owner(then become server) else client
+                        //all server/client init calls go through Send Activity
+                        String myIP = Utils.getMyIP();
+                        activity.makeToast("MY IP:"+myIP);
+
+                        if(ownerIP.equals(myIP)){
+                            // i am the owner
+                            activity.makeServer();
+                        } else {
+                            // else client
+                            activity.makeClient(ownerIP);
+                        }
                     }
                 });
-                // info to find group owner IP
-                //check if Group Owner(then become server) else client
-                //all server/client init calls go through Send Activity
-                String myIP = Utils.getMyIP();
-                activity.makeToast("MY IP:"+myIP);
 
-                if(ownerIP.equals(myIP)){
-                    // i am the owner
-                    activity.makeServer();
-                } else {
-                    // else client
-                    activity.makeClient(ownerIP);
-                }
 
 
             } else {
