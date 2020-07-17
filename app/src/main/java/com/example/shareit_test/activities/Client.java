@@ -83,7 +83,7 @@ public class Client extends AsyncTask<Void,Double,String> {
                     OutputStream outputStream = clientToServer.getOutputStream();
                     ContentResolver cr = context.getContentResolver();
                     InputStream inputStream = null;
-                    inputStream = cr.openInputStream(Uri.parse(FilePath));
+                    inputStream = cr.openInputStream(Uri.fromFile(new File(FilePath)));
                     while ((len = inputStream.read(buf)) != -1) {
                         outputStream.write(buf, 0, len);
                     }
