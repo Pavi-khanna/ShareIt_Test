@@ -353,21 +353,14 @@ public class SendActivity extends Activity implements WifiP2pManager.ChannelList
 
     public void makeServer(){
         //create a textView for display and call the server AsyncTask
-        while(true){
-            if(file_path_string!=null) {
-                new Server(this, file_path, SENDER, file_path_string);
-            }
-        }
+        new Server(this, file_path, SENDER, file_path_string);
     }
 
 
     public void makeClient(String destIP){
         //create a textView for display and call the client AsyncTask
-        while(true){
-            if(file_path_string!=null) {
-                new Client(this, file_path, SENDER, destIP, file_path_string);
-            }
-        }
+        new Client(this, file_path, SENDER, destIP, file_path_string);
+
     }
 
     public void setMobileDataState(boolean mobileDataEnabled)
