@@ -1,5 +1,6 @@
 package com.example.shareit_test.activities;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -29,6 +30,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.shareit_test.activities.DeviceListFragment.DeviceActionListener;
@@ -46,6 +48,8 @@ public class SendActivity extends Activity implements WifiP2pManager.ChannelList
     Button createhotspot,selectfilebutton;
     WifiP2pManager.Channel channel;
     WifiP2pManager manager;
+    TextView file_path;
+    String file_path_string = null;
     private boolean isWifiP2pEnabled = false;
     private boolean retryChannel = false;
     private final IntentFilter intentFilter = new IntentFilter();
@@ -56,6 +60,21 @@ public class SendActivity extends Activity implements WifiP2pManager.ChannelList
     private Intent browseFilesIntent;
     private boolean connectionReady = false;
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case 1001:
+                if (resultCode == RESULT_OK) {
+                    file_path_string = data.getData().getPath();
+                    file_path.setText(file_path_string);
+                }
+                break;
+        }
+
+    }
 
     /**
      * @param isWifiP2pEnabled the isWifiP2pEnabled to set
@@ -72,6 +91,7 @@ public class SendActivity extends Activity implements WifiP2pManager.ChannelList
         setContentView(R.layout.activity_send);
         createhotspot = findViewById(R.id.hotspot);
         selectfilebutton = findViewById(R.id.select_file);
+        file_path = findViewById(R.id.file_path);
         //senderListView = findViewById(R.id.avail_devices_list);
 
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
@@ -81,7 +101,6 @@ public class SendActivity extends Activity implements WifiP2pManager.ChannelList
 
         manager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
         channel = manager.initialize(this, getMainLooper(), null);
-
 
 
 
@@ -149,7 +168,9 @@ public class SendActivity extends Activity implements WifiP2pManager.ChannelList
             @Override
             public void onClick(View view) {
                 if(connectionReady) {
-                    startActivity(browseFilesIntent);
+                    Intent filesOpener = new Intent(Intent.ACTION_GET_CONTENT);
+                    filesOpener.setType("*/*");
+                    startActivityForResult(filesOpener, 1001);
                 } else {
                     makeToast("No Peer Connection Established");
                 }

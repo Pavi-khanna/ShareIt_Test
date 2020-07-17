@@ -86,7 +86,7 @@ public class Server extends AsyncTask<Void,Double,String> {
 
                 final File f = new File(Environment.getExternalStorageDirectory() + "/"
                         + context.getPackageName() + "/ShareIt_test-" + System.currentTimeMillis()
-                        + ".jpg");
+                        + ".mp4");
 
                 File dirs = new File(f.getParent());
                 if (!dirs.exists())
