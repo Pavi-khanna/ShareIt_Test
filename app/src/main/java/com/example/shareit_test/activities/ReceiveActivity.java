@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
@@ -28,6 +29,7 @@ public class ReceiveActivity extends Activity implements WifiP2pManager.ChannelL
 
     private final int RECEIVER = 0;
     ListView receiverListView;
+    TextView statusTextView;
     WifiP2pManager.Channel channel;
     WifiP2pManager manager;
     private boolean isWifiP2pEnabled = false;
@@ -52,6 +54,7 @@ public class ReceiveActivity extends Activity implements WifiP2pManager.ChannelL
 
         receiverListView = findViewById(R.id.list_receive);
         senderArrayList = new ArrayList<String>();
+        statusTextView = findViewById(R.id.status_text);
 
         /*wifiManager = (WifiManager)
                 getApplicationContext().getSystemService(Context.WIFI_SERVICE);
