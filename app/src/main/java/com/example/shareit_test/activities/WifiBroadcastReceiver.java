@@ -126,10 +126,10 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
 
                         if(ownerIP.equals(myIP)){
                             // i am the owner
-                            activity.makeServer();
+                            activity.readyServer();
                         } else {
                             // else client
-                            activity.makeClient(ownerIP);
+                            activity.readyClient(ownerIP);
                         }
                     }
                 });

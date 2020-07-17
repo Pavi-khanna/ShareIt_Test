@@ -59,6 +59,8 @@ public class SendActivity extends Activity implements WifiP2pManager.ChannelList
     private WifiP2pConfig.Builder config_builder;
     private Intent browseFilesIntent;
     private boolean connectionReady = false;
+    private String SERVER_OR_CLIENT = null;
+    private String serverIP = null;
 
 
     @Override
@@ -70,6 +72,13 @@ public class SendActivity extends Activity implements WifiP2pManager.ChannelList
                 if (resultCode == RESULT_OK) {
                     file_path_string = data.getData().getPath();
                     file_path.setText(file_path_string);
+                    if(SERVER_OR_CLIENT.equals("SERVER")){
+                        makeServer();
+                    }else if (SERVER_OR_CLIENT.equals("CLIENT")){
+                        makeClient(serverIP);
+                    } else {
+                        makeToast("No Device connected");
+                    }
                 }
                 break;
         }
@@ -390,5 +399,14 @@ public class SendActivity extends Activity implements WifiP2pManager.ChannelList
         }
 
         return false;
+    }
+
+    public void readyServer() {
+        SERVER_OR_CLIENT = "SERVER";
+    }
+
+    public void readyClient(String ownerIP) {
+        SERVER_OR_CLIENT = "CLIENT";
+        this.serverIP = ownerIP;
     }
 }
