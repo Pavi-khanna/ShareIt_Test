@@ -15,7 +15,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.ConnectException;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 
 import static com.example.shareit_test.activities.Utils.copyFile;
 
@@ -50,9 +52,27 @@ public class Client extends AsyncTask<Void,Double,String> {
              * Create a server socket and wait for client connections. This
              * call blocks until a connection is accepted from a client
              */
-            // TODO: get the IP of the owner
+            int numberOfTimesTried = 0;
             // Set server socket ip and port
-            clientToServer = new Socket(destIP,8888);
+            while(numberOfTimesTried<10) {
+                try {
+                    clientToServer = new Socket(destIP, 8888);
+                    break;
+                } catch (ConnectException e) {
+                    Log.e("CLIENT", "Error while connecting. " + e.getMessage());
+                } catch (SocketTimeoutException e) {
+                    Log.e("CLIENT", "Connection: " + e.getMessage() + ".");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    Thread.sleep(5000); //milliseconds
+                } catch (InterruptedException e) {
+                    Log.e("CLIENT","Interrupted before connection");
+                }
+                numberOfTimesTried++;
+            }
+
 
             if (recv_or_send == SENDER) {
                 //i am the sender
