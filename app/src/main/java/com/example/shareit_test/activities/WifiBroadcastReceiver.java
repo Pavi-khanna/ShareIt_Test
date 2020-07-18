@@ -87,6 +87,7 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
                 manager.requestPeers(channel, (WifiP2pManager.PeerListListener) activity.getFragmentManager()
                         .findFragmentById(R.id.avail_list_frag));
 
+                /*
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     manager.requestNetworkInfo(channel, new WifiP2pManager.NetworkInfoListener() {
                         @Override
@@ -96,6 +97,8 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
                         }
                     });
                 }
+
+                 */
 
             }
             Log.d("Send Wifi BR", "P2P peers changed");

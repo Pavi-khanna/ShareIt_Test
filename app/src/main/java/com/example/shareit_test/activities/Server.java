@@ -20,7 +20,7 @@ import java.net.Socket;
 
 import static com.example.shareit_test.activities.Utils.copyFile;
 
-public class Server extends AsyncTask<Void,Double,String> {
+public class Server extends AsyncTask<Void,Void,String> {
 
     private final int SENDER = 1;
     private final int RECEIVER = 0;
@@ -72,7 +72,7 @@ public class Server extends AsyncTask<Void,Double,String> {
                     while ((len = inputStream.read(buf)) != -1) {
                         outputStream.write(buf, 0, len);
                     }
-                    statusText.setText("File Send Complete");
+
                     outputStream.close();
                     inputStream.close();
                 } catch (FileNotFoundException e) {
@@ -98,7 +98,6 @@ public class Server extends AsyncTask<Void,Double,String> {
                 copyFile(inputstream, new FileOutputStream(f));
                 inputstream.close();
                 serverSocket.close();
-                statusText.setText("File Received");
                 return f.getAbsolutePath();
             }
         } catch(IOException e){
@@ -124,4 +123,10 @@ public class Server extends AsyncTask<Void,Double,String> {
         return null;
     }
 
+    @Override
+    protected void onProgressUpdate (Void... values) {
+
+        // Updating the TextView
+        statusText.setText("File Sent");
+    }
 }
