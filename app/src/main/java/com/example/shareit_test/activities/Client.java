@@ -83,16 +83,20 @@ public class Client extends AsyncTask<Void,Void,String> {
                     OutputStream outputStream = clientToServer.getOutputStream();
                     ContentResolver cr = context.getContentResolver();
                     InputStream inputStream = null;
-                    inputStream = cr.openInputStream(Uri.fromFile(new File(FilePath)));
+                    File file = new File(FilePath);
+                    Log.d("Sender Filepath",file.getPath());
+                    Log.d("Client Sender", "File Size: "+file.length());
+                    inputStream = cr.openInputStream(Uri.fromFile(file));
                     while ((len = inputStream.read(buf)) != -1) {
                         outputStream.write(buf, 0, len);
+                        Log.d("Client Sender", "Sent "+len+" bytes");
                     }
                     outputStream.close();
                     inputStream.close();
                 } catch (FileNotFoundException e) {
-                    Log.e("Client Receiver", e.getMessage());
+                    Log.e("Client Sender", e.getMessage());
                 } catch (IOException e) {
-                    Log.e("Client Receiver", e.getMessage());
+                    Log.e("Client Sender", e.getMessage());
                 }
 
                 return null;
@@ -111,11 +115,11 @@ public class Client extends AsyncTask<Void,Void,String> {
                 // not handling copyfile stream failure
                 copyFile(inputstream, new FileOutputStream(f));
                 inputstream.close();
-                statusText.setText("File Received");
+                //statusText.setText("File Received");
                 return f.getAbsolutePath();
             }
         } catch(IOException e){
-            Log.e("Client Receiver", e.getMessage());
+            Log.e("Client Sender", e.getMessage());
             return null;
         }
         /**

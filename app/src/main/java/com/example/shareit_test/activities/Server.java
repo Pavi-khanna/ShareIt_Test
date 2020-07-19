@@ -68,17 +68,21 @@ public class Server extends AsyncTask<Void,Void,String> {
                     OutputStream outputStream = client.getOutputStream();
                     ContentResolver cr = context.getContentResolver();
                     InputStream inputStream = null;
-                    inputStream = cr.openInputStream(Uri.fromFile(new File(FilePath)));
+                    File file = new File(FilePath);
+                    Log.d("Sender Filepath",file.getPath());
+                    Log.d("Server Sender", "File Size: "+file.length());
+                    inputStream = cr.openInputStream(Uri.fromFile(file));
                     while ((len = inputStream.read(buf)) != -1) {
                         outputStream.write(buf, 0, len);
+                        Log.d("Server Sender", "Sent "+len+" bytes");
                     }
 
                     outputStream.close();
                     inputStream.close();
                 } catch (FileNotFoundException e) {
-                    Log.e("Server Receiver", e.getMessage());
+                    Log.e("Server Sender", e.getMessage());
                 } catch (IOException e) {
-                    Log.e("Server Receiver", e.getMessage());
+                    Log.e("Server Sender", e.getMessage());
                 }
 
                 return null;
@@ -86,7 +90,7 @@ public class Server extends AsyncTask<Void,Void,String> {
                 //i am the receiver
                 //start listening and wait for client to send
 
-                final File f = new File(Environment.getExternalStorageState() + "/ShareIt_test-" + System.currentTimeMillis()
+                final File f = new File(Environment.getExternalStorageDirectory() + "/ShareIt_test-" + System.currentTimeMillis()
                         + ".mp4");
 
                 File dirs = new File(f.getParent());
