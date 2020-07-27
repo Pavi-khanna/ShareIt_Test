@@ -29,7 +29,7 @@ public class Server extends AsyncTask<Void,Void,String> {
     private TextView statusText;
     private int recv_or_send,len;
     private Uri FilePath = null;
-    byte buf[]  = new byte[1024];
+    byte buf[]  = new byte[4096];
 
 
     // init this way with file path when sending a file

@@ -39,7 +39,7 @@ public class Utils {
     }
 
     public static boolean copyFile(InputStream inputStream, OutputStream out) {
-        byte buf[] = new byte[1024];
+        byte buf[] = new byte[4096];
         int len;
         try {
             while ((len = inputStream.read(buf)) != -1) {

@@ -18,6 +18,7 @@ import java.io.OutputStream;
 import java.net.ConnectException;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.util.concurrent.TimeUnit;
 
 import static com.example.shareit_test.activities.Utils.copyFile;
 
@@ -29,7 +30,7 @@ public class Client extends AsyncTask<Void,Void,String> {
     private TextView statusText;
     private int recv_or_send,len;
     private Uri FilePath = null;
-    byte buf[]  = new byte[1024];
+    byte buf[]  = new byte[4096];
     private String destIP = null;
 
 
@@ -108,9 +109,13 @@ public class Client extends AsyncTask<Void,Void,String> {
                 if (!dirs.exists())
                     dirs.mkdirs();
                 f.createNewFile();
+                long tic = System.nanoTime();
                 InputStream inputstream = clientToServer.getInputStream();
                 // not handling copyfile stream failure
                 copyFile(inputstream, new FileOutputStream(f));
+                long elapsedTime = System.nanoTime() - tic;
+                long elapsedTimeSecs = TimeUnit.SECONDS.convert(elapsedTime, TimeUnit.NANOSECONDS);
+                Log.d("Receiver","Received File in "+elapsedTimeSecs+" secs");
                 inputstream.close();
                 //statusText.setText("File Received");
                 return f.getAbsolutePath();
