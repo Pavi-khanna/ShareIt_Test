@@ -44,7 +44,7 @@ public class Utils {
         try {
             while ((len = inputStream.read(buf)) != -1) {
                 out.write(buf, 0, len);
-                Log.d("Utils - Sender", "Sent "+len+" bytes");
+                Log.d("Utils", "Received "+len+" bytes");
             }
             out.close();
             inputStream.close();

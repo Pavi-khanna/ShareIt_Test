@@ -177,7 +177,7 @@ public class SendActivity extends Activity implements WifiP2pManager.ChannelList
         selectfilebutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!connectionReady) {
+                if(connectionReady) {
                     Intent filesOpener = new Intent(Intent.ACTION_GET_CONTENT);
                     filesOpener.setType("*/*");
                     startActivityForResult(filesOpener, 1001);

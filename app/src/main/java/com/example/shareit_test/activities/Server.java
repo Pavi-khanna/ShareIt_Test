@@ -17,6 +17,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.TimeUnit;
 
 import static com.example.shareit_test.activities.Utils.copyFile;
 
@@ -97,9 +98,13 @@ public class Server extends AsyncTask<Void,Void,String> {
                 if (!dirs.exists())
                     dirs.mkdirs();
                 f.createNewFile();
+                long tic = System.nanoTime();
                 InputStream inputstream = client.getInputStream();
                 // not handling copyfile stream failure
                 copyFile(inputstream, new FileOutputStream(f));
+                long elapsedTime = System.nanoTime() - tic;
+                long elapsedTimeSecs = TimeUnit.SECONDS.convert(elapsedTime, TimeUnit.NANOSECONDS);
+                Log.d("Receiver","Received File in "+elapsedTimeSecs+" secs");
                 inputstream.close();
                 serverSocket.close();
                 return f.getAbsolutePath();
