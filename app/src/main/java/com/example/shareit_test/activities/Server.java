@@ -27,12 +27,12 @@ public class Server extends AsyncTask<Void,Void,String> {
     private Context context;
     private TextView statusText;
     private int recv_or_send,len;
-    private String FilePath = null;
+    private Uri FilePath = null;
     byte buf[]  = new byte[1024];
 
 
     // init this way with file path when sending a file
-    public Server(Context context, View statusText, int recv_or_send, String FilePath) {
+    public Server(Context context, View statusText, int recv_or_send, Uri FilePath) {
         this.context = context;
         this.statusText = (TextView) statusText;
         this.recv_or_send = recv_or_send;
@@ -68,10 +68,10 @@ public class Server extends AsyncTask<Void,Void,String> {
                     OutputStream outputStream = client.getOutputStream();
                     ContentResolver cr = context.getContentResolver();
                     InputStream inputStream = null;
-                    File file = new File(FilePath);
-                    Log.d("Sender Filepath",file.getPath());
-                    Log.d("Server Sender", "File Size: "+file.length());
-                    inputStream = cr.openInputStream(Uri.fromFile(file));
+                    //File file = new File(FilePath);
+                    //Log.d("Sender Filepath",file.getPath());
+                    //Log.d("Server Sender", "File Size: "+file.length());
+                    inputStream = cr.openInputStream(FilePath);
                     while ((len = inputStream.read(buf)) != -1) {
                         outputStream.write(buf, 0, len);
                         Log.d("Server Sender", "Sent "+len+" bytes");

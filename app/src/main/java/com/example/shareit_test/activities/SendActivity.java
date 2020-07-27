@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WpsInfo;
 import android.net.wifi.p2p.WifiP2pConfig;
@@ -49,7 +50,7 @@ public class SendActivity extends Activity implements WifiP2pManager.ChannelList
     WifiP2pManager.Channel channel;
     WifiP2pManager manager;
     TextView file_path;
-    String file_path_string = null;
+    Uri file_path_string = null;
     private boolean isWifiP2pEnabled = false;
     private boolean retryChannel = false;
     private final IntentFilter intentFilter = new IntentFilter();
@@ -59,7 +60,7 @@ public class SendActivity extends Activity implements WifiP2pManager.ChannelList
     private WifiP2pConfig.Builder config_builder;
     private Intent browseFilesIntent;
     private boolean connectionReady = false;
-    private String SERVER_OR_CLIENT = null;
+    private String SERVER_OR_CLIENT = "NULL";
     private String serverIP = null;
 
 
@@ -70,8 +71,8 @@ public class SendActivity extends Activity implements WifiP2pManager.ChannelList
         switch (requestCode) {
             case 1001:
                 if (resultCode == RESULT_OK) {
-                    file_path_string = data.getData().getPath();
-                    file_path.setText(file_path_string);
+                    file_path_string = data.getData();
+                    file_path.setText(file_path_string.toString());
                     if(SERVER_OR_CLIENT.equals("SERVER")){
                         makeServer();
                     }else if (SERVER_OR_CLIENT.equals("CLIENT")){
@@ -176,7 +177,7 @@ public class SendActivity extends Activity implements WifiP2pManager.ChannelList
         selectfilebutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(connectionReady) {
+                if(!connectionReady) {
                     Intent filesOpener = new Intent(Intent.ACTION_GET_CONTENT);
                     filesOpener.setType("*/*");
                     startActivityForResult(filesOpener, 1001);
